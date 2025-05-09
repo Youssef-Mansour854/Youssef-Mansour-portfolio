@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://youssef-mansour854.github.io/portfolio",
+  "homepage": "https://youssef-mansour854.github.io/Youssef-Mansour-portfolio",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
