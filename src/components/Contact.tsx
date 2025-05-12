@@ -12,7 +12,6 @@ export const Contact: React.FC<ContactProps> = ({ isDarkMode }) => {
   const [isSending, setIsSending] = useState(false);
 
   useEffect(() => {
-    // Initialize EmailJS with your public key
     emailjs.init('y1dCE7i8xwDUQGJfD');
   }, []);
 
@@ -24,57 +23,25 @@ export const Contact: React.FC<ContactProps> = ({ isDarkMode }) => {
     const loadingToast = toast.loading('Sending message...');
 
     try {
-      const formData = new FormData(formRef.current);
-      const data = {
-        from_name: formData.get('from_name')?.toString().trim(),
-        reply_to: formData.get('reply_to')?.toString().trim(),
-        message: formData.get('message')?.toString().trim(),
-        to_email: formData.get('to_email')?.toString().trim(),
-      };
-
-      console.log('Form Data:', data);
-
-      // Validate data
-      if (!data.from_name || !data.reply_to || !data.message) {
-        throw new Error('Please fill in all fields');
-      }
-
-      // Validate email format
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(data.reply_to)) {
-        throw new Error('Please enter a valid email address');
-      }
-
-      // Validate to_email if provided
-      if (data.to_email && !emailRegex.test(data.to_email)) {
-        throw new Error('Invalid recipient email address');
-      }
-
       const result = await emailjs.sendForm(
-        'service_7sqobe8',
-        'template_xqx6cy1',
-        formRef.current
+        'service_oo4n4or',
+        'template_rx5ptzb',
+        formRef.current,
+        'y1dCE7i8xwDUQGJfD'
       );
 
-      console.log('EmailJS Result:', result);
-
       if (result.status === 200) {
-        toast.success('Message sent successfully!', { id: loadingToast });
+        toast.success('تم إرسال الرسالة بنجاح!');
         formRef.current.reset();
       } else {
-        throw new Error(`Failed to send message. Status: ${result.status}`);
+        throw new Error('Failed to send message');
       }
-    } catch (error: any) {
-      console.error('EmailJS Error Details:', {
-        message: error.message,
-        status: error.status,
-        text: error.text,
-        response: error.response,
-      });
-      const errorMessage = error.text || error.message || 'Failed to send message. Please try again.';
-      toast.error(errorMessage, { id: loadingToast });
+    } catch (error) {
+      console.error('Error sending email:', error);
+      toast.error('حدث خطأ أثناء إرسال الرسالة');
     } finally {
       setIsSending(false);
+      toast.dismiss(loadingToast);
     }
   };
 
@@ -136,12 +103,6 @@ export const Contact: React.FC<ContactProps> = ({ isDarkMode }) => {
               } border focus:outline-none focus:ring-1 focus:ring-opacity-50 transition-all duration-300`}
             ></textarea>
           </div>
-          {/* Add this only if the template requires a to_email field */}
-          <input
-            type="hidden"
-            name="to_email"
-            value="your.email@gmail.com" // استبدل ببريدك الفعلي
-          />
           <motion.button
             type="submit"
             disabled={isSending}

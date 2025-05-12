@@ -18,7 +18,7 @@ export const Footer: React.FC<FooterProps> = ({ isDarkMode }) => {
             <span>© {new Date().getFullYear()}</span>
             |
             <a 
-              href="https://github.com/Youssef-Mansour854/my-portfolio" 
+              href="https://github.com/Youssef-Mansour854/Youssef-Mansour-portfolio" 
               target="_blank" 
               rel="noopener noreferrer"
               className={`${isDarkMode ? 'hover:text-[#c792ea]' : 'hover:text-blue-600'} transition-colors`}
