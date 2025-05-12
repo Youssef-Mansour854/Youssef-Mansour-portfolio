@@ -1,51 +1,46 @@
-# Personal Portfolio Website
+# My Portfolio Website
 
-A modern, responsive portfolio website built with React, TypeScript, and Vite, featuring a beautiful UI with dark/light mode.
+A modern, responsive portfolio website built with React, TypeScript, and Tailwind CSS.
 
-## 🚀 Features
+## Features
 
-- 🌓 Dark/Light mode
-- 📱 Fully responsive design
-- ⚡ Built with React + TypeScript + Vite
-- 🎨 Styled with Tailwind CSS
-- ✨ Smooth animations with Framer Motion
+- 🌙 Dark/Light mode
+- 📱 Fully responsive
+- ⚡ Fast and optimized
+- 🎨 Modern UI/UX
 - 📧 Contact form with EmailJS integration
 
-## 🛠️ Technologies Used
+## Tech Stack
 
 - React
 - TypeScript
-- Vite
 - Tailwind CSS
 - Framer Motion
 - EmailJS
-- Lucide Icons
+- Vite
 
-## 🚀 Getting Started
+## Getting Started
 
-1. Clone the repository:
-```bash
-git clone https://github.com/Youssef-Mansour854/portfolio.git
-```
-
+1. Clone the repository
 2. Install dependencies:
-```bash
-cd portfolio
-npm install
-```
-
+   ```bash
+   npm install
+   ```
 3. Run the development server:
-```bash
-npm run dev
+   ```bash
+   npm run dev
+   ```
+
+## Environment Variables
+
+Create a `.env` file in the root directory with the following variables:
+
+```
+VITE_EMAILJS_SERVICE_ID=your_service_id
+VITE_EMAILJS_TEMPLATE_ID=your_template_id
+VITE_EMAILJS_PUBLIC_KEY=your_public_key
 ```
 
-4. Build for production:
-```bash
-npm run build
-```
+## License
 
-## 👨‍💻 Author
-
-- **Youssef Mansour**
-  - GitHub: [@Youssef-Mansour854](https://github.com/Youssef-Mansour854)
-  - LinkedIn: [Youssef Mansour](https://www.linkedin.com/in/youssef-mansour-620845251/)
+MIT
