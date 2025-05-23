@@ -1,6 +1,5 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import emailjs from '@emailjs/browser';
 import toast from 'react-hot-toast';
 
 interface ContactProps {
@@ -11,10 +10,6 @@ export const Contact: React.FC<ContactProps> = ({ isDarkMode }) => {
   const formRef = useRef<HTMLFormElement>(null);
   const [isSending, setIsSending] = useState(false);
 
-  useEffect(() => {
-    emailjs.init('y1dCE7i8xwDUQGJfD');
-  }, []);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formRef.current) return;
@@ -22,23 +17,30 @@ export const Contact: React.FC<ContactProps> = ({ isDarkMode }) => {
     setIsSending(true);
     const loadingToast = toast.loading('Sending message...');
 
-    try {
-      const result = await emailjs.sendForm(
-        'service_oo4n4or',
-        'template_rx5ptzb',
-        formRef.current,
-        'y1dCE7i8xwDUQGJfD'
-      );
+    const formData = new FormData(formRef.current);
 
-      if (result.status === 200) {
-        toast.success('تم إرسال الرسالة بنجاح!');
+    try {
+      const response = await fetch('https://formspree.io/f/mwpojjzk', { // <-- Your Formspree endpoint here
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        toast.success('Message sent successfully!');
         formRef.current.reset();
       } else {
-        throw new Error('Failed to send message');
+        // You can try to read the error message from Formspree if available
+        // const errorData = await response.json().catch(() => ({}));
+        // const errorMessage = errorData.error || 'Failed to send message';
+        // toast.error(errorMessage);
+        throw new Error('Failed to send message'); // Or use a generic error message
       }
     } catch (error) {
       console.error('Error sending email:', error);
-      toast.error('حدث خطأ أثناء إرسال الرسالة');
+      toast.error('An error occurred while sending the message');
     } finally {
       setIsSending(false);
       toast.dismiss(loadingToast);
@@ -62,7 +64,7 @@ export const Contact: React.FC<ContactProps> = ({ isDarkMode }) => {
             <label className={`block mb-2 ${isDarkMode ? 'text-[#82aaff]' : 'text-blue-600'}`}>Name</label>
             <input
               type="text"
-              name="from_name"
+              name="from_name" // Formspree will recognize this field. You can name it "name" if you want.
               required
               onInvalid={(e) => e.currentTarget.setCustomValidity('Please enter your name')}
               onInput={(e) => e.currentTarget.setCustomValidity('')}
@@ -77,7 +79,7 @@ export const Contact: React.FC<ContactProps> = ({ isDarkMode }) => {
             <label className={`block mb-2 ${isDarkMode ? 'text-[#82aaff]' : 'text-blue-600'}`}>Email</label>
             <input
               type="email"
-              name="reply_to"
+              name="reply_to" // Formspree will use this as "Reply-To". You can name it "email" as well.
               required
               onInvalid={(e) => e.currentTarget.setCustomValidity('Please enter a valid email address')}
               onInput={(e) => e.currentTarget.setCustomValidity('')}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sun, Moon, Menu, X } from 'lucide-react';
+import { Menu, X, Sun, Moon } from 'lucide-react';
 import { Logo } from './Logo';
 
 interface NavbarProps {
@@ -27,12 +27,15 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
           </div>
           <div className="flex items-center gap-4">
+            {/* Dark/Light mode toggle button */}
             <button
               onClick={() => setIsDarkMode(!isDarkMode)}
               className={`p-2 rounded-lg transition-colors ${isDarkMode ? 'hover:bg-[#1f2335]' : 'hover:bg-gray-100'}`}
+              aria-label="Toggle dark mode"
             >
               {isDarkMode ? <Sun className="w-5 h-5 text-[#82aaff]" /> : <Moon className="w-5 h-5 text-blue-600" />}
             </button>
+            {/* Mobile menu button only */}
             <button 
               onClick={toggleMobileMenu}
               className={`md:hidden ${isDarkMode ? 'text-[#82aaff] hover:text-[#c792ea]' : 'text-blue-600 hover:text-blue-800'} transition-colors`}

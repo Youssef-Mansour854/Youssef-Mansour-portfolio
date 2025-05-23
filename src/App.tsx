@@ -9,25 +9,17 @@ import { Profile } from './components/Profile';
 import { Projects } from './components/Projects';
 import { Skills } from './components/Skills';
 import { Contact } from './components/Contact';
+import './App.css'; // Import the CSS file for the variables
 
 function App() {
+  const { theme, toggleTheme } = useTheme();
   const [activeTab, setActiveTab] = useState('profile');
   const [isLoaded, setIsLoaded] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(true);
 
   useEffect(() => {
     setIsLoaded(true);
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      setIsDarkMode(savedTheme === 'dark');
-    }
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
-    document.documentElement.classList.toggle('light-mode', !isDarkMode);
-  }, [isDarkMode]);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -36,32 +28,32 @@ function App() {
   const renderActiveComponent = () => {
     switch (activeTab) {
       case 'profile':
-        return <Profile isDarkMode={isDarkMode} />;
+        return <Profile isDarkMode={theme === 'dark'} />;
       case 'projects':
-        return <Projects isDarkMode={isDarkMode} />;
+        return <Projects isDarkMode={theme === 'dark'} />;
       case 'skills':
-        return <Skills isDarkMode={isDarkMode} />;
+        return <Skills isDarkMode={theme === 'dark'} />;
       case 'contact':
-        return <Contact isDarkMode={isDarkMode} />;
+        return <Contact isDarkMode={theme === 'dark'} />;
       default:
         return null;
     }
   };
 
   return (
-    <div className={`min-h-screen ${isDarkMode ? 'bg-[#0f1117] text-[#a6accd]' : 'bg-white text-gray-800'} font-mono transition-all duration-300 flex flex-col ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+    <div className={`min-h-screen ${theme === 'dark' ? 'bg-[#0f1117] text-[#a6accd]' : 'bg-white text-gray-800'} font-mono transition-all duration-300 flex flex-col ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
       <Toaster position="bottom-right" />
       
       <Navbar 
-        isDarkMode={isDarkMode}
-        setIsDarkMode={setIsDarkMode}
+        isDarkMode={theme === 'dark'}
+        setIsDarkMode={toggleTheme}
         isMobileMenuOpen={isMobileMenuOpen}
         toggleMobileMenu={toggleMobileMenu}
       />
 
       {isMobileMenuOpen && (
         <MobileMenu
-          isDarkMode={isDarkMode}
+          isDarkMode={theme === 'dark'}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
           setIsMobileMenuOpen={setIsMobileMenuOpen}
@@ -70,7 +62,7 @@ function App() {
 
       <div className="flex flex-col md:flex-row flex-grow">
         <Sidebar
-          isDarkMode={isDarkMode}
+          isDarkMode={theme === 'dark'}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
         />
@@ -82,9 +74,31 @@ function App() {
         </div>
       </div>
 
-      <Footer isDarkMode={isDarkMode} />
+      <Footer isDarkMode={theme === 'dark'} />
+
+      
     </div>
   );
 }
 
 export default App;
+
+
+type Theme = "light" | "dark";
+
+export function useTheme() {
+  const [theme, setTheme] = useState<Theme>(() => {
+    const saved = localStorage.getItem("theme");
+    return saved === "dark" ? "dark" : "light";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  };
+
+  return { theme, toggleTheme };
+}
